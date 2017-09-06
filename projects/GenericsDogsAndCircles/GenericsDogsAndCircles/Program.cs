@@ -17,10 +17,10 @@ namespace GenericsDogsAndCircles {
 
             #region ObjectComparer test
             //ObjectComparer comparer = new ObjectComparer();
-            BetterObjectComparer<Dog> dogComparer = new BetterObjectComparer<Dog>();
-            BetterObjectComparer<Circle> circleComparer = new BetterObjectComparer<Circle>();
-            Console.WriteLine(dogComparer.Largest(dog1, dog2, dog3));
-            Console.WriteLine(circleComparer.Largest(c1, c2, c3));
+            EvenBetterObjectComparer<Dog> dogComparer = new EvenBetterObjectComparer<Dog>();
+            EvenBetterObjectComparer<Circle> circleComparer = new EvenBetterObjectComparer<Circle>();
+            Console.WriteLine(dogComparer.Largest(dog1, dog2, dog3, new DogCompareByHeight()));
+            Console.WriteLine(circleComparer.Largest(c1, c2, c3, new CircleCompareByX()));
             #endregion
 
             KeepConsoleWindowOpen();

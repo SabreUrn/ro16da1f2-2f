@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AEED9F49-4604-477F-8891-36FD68ABEEA8}</ProjectGuid>
+    <ProjectGuid>{6C71C642-C9A4-49B5-8296-0EE783DA3097}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>GenericsDogsAndCircles</RootNamespace>
-    <AssemblyName>GenericsDogsAndCircles</AssemblyName>
+    <RootNamespace>GenericsVariance</RootNamespace>
+    <AssemblyName>GenericsVariance</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -42,13 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BetterObjectComparer.cs" />
-    <Compile Include="Circle.cs" />
-    <Compile Include="CircleCompareByX.cs" />
-    <Compile Include="Dog.cs" />
-    <Compile Include="DogCompareByHeight.cs" />
-    <Compile Include="EvenBetterObjectComparer.cs" />
-    <Compile Include="ObjectComparer.cs" />
+    <Compile Include="AnimalProcessor.cs" />
+    <Compile Include="Animals\Animal.cs" />
+    <Compile Include="Animals\Bird.cs" />
+    <Compile Include="Animals\Cat.cs" />
+    <Compile Include="Collections\Collection.cs" />
+    <Compile Include="Collections\ICollectionGet.cs" />
+    <Compile Include="Collections\ICollectionSet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
