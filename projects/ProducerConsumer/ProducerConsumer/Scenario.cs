@@ -1,16 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace ProducerConsumer
-{
+namespace ProducerConsumer {
     /// <summary>
     /// This class sets up a scenario of participants.
     /// A participant can be a Queue, Producer, Consumer or Reporter.
     /// Currently, the scenario only contains a single participant
     /// of each type.
     /// </summary>
-    public class Scenario
-    {
+    public class Scenario {
         #region Instance fields
         private QueueWithLimit<Data> _queue;
         private Producer<Data> _producer;
@@ -27,8 +24,7 @@ namespace ProducerConsumer
         /// of each type.
         /// </summary>
         public Scenario(int queueLimit, int initialElements, int iterations,
-                        int producerDelay, int consumerDelay, Reporter<Data>.ReportMode mode)
-        {
+                        int producerDelay, int consumerDelay, Reporter<Data>.ReportMode mode) {
             _queue = new QueueWithLimit<Data>(queueLimit, initialElements);
             _producer = new Producer<Data>(_queue);
             _consumer = new Consumer<Data>(_queue);
@@ -46,8 +42,7 @@ namespace ProducerConsumer
         /// starting a producer task and a consumer task.
         /// </summary>
         /// <returns></returns>
-        public async Task RunAsync()
-        {
+        public async Task RunAsync() {
             Task taskProduce = Task.Run(() => ProduceWithRandomDelay(_iterations, _producerDelay));
             Task taskConsume = Task.Run(() => ConsumeWithRandomDelay(_iterations, _consumerDelay));
 
@@ -65,11 +60,9 @@ namespace ProducerConsumer
         /// 2) Call Report, so the change can be reported.
         /// 3) Wait for a number of milli-seconds (between 0 and maxDelay)
         /// </summary>
-        private async Task ProduceWithRandomDelay(int iterations, int maxDelay)
-        {
+        private async Task ProduceWithRandomDelay(int iterations, int maxDelay) {
             Random rng = new Random();
-            for (int i = 0; i < iterations; i++)
-            {
+            for (int i = 0; i < iterations; i++) {
                 _producer.Produce();
                 _reporter.Report();
 
@@ -84,17 +77,15 @@ namespace ProducerConsumer
         /// 2) Call Report, so the change can be reported.
         /// 3) Wait for a number of milli-seconds (between 0 and maxDelay)
         /// </summary>
-        private async Task ConsumeWithRandomDelay(int iterations, int maxDelay)
-        {
+        private async Task ConsumeWithRandomDelay(int iterations, int maxDelay) {
             Random rng = new Random();
-            for (int i = 0; i < iterations; i++)
-            {
+            for (int i = 0; i < iterations; i++) {
                 _consumer.Consume();
                 _reporter.Report();
 
                 await Task.Delay(rng.Next(maxDelay));
             }
-        } 
+        }
         #endregion
     }
 }
