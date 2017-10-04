@@ -98,7 +98,7 @@ namespace TestExampleC {
 
             //throw exception if currencyCross does not match an entry in CurrencyCrosses
             if (!CurrencyCrosses.Contains(currencyCross)) {
-                throw new ArgumentException("Currency cross does not exist.");
+                throw new ArgumentException("Given currency cross does not exist.");
             }
 
             //throw exception if rate is not positive
@@ -117,26 +117,42 @@ namespace TestExampleC {
         }
 
         //calculate exchanged rate
-        public void CalculateExchangedRate(string currencyCross, string currency, int amount) {
-            //TODO: throw exception if currencyCross is empty,
+        public double CalculateExchangedRate(string currencyCross, string currency, double amount) {
+            //throw exception if currencyCross is empty,
             //whitespace, or otherwise not 6 characters
+            if(String.IsNullOrWhiteSpace(currencyCross) || currency.Length != 6) {
+                throw new ArgumentException("Currency cross must be exactly six characters.");
+            }
 
-            //TODO: throw exception if currencyCross does not match an entry in CurrencyCrosses
+            //throw exception if currencyCross does not match an entry in CurrencyCrosses
+            if(!CurrencyCrosses.Contains(currencyCross)) {
+                throw new ArgumentException("Given currency cross does not exist.");
+            }
 
-            //TODO: throw exception if currency does not match an entry in Currencies
+            //throw exception if currency does not match an entry in Currencies
+            if(!Currencies.Contains(currency)) {
+                throw new ArgumentException("Given currency does not exist.");
+            }
 
-            //TODO: throw exception if there is no exchange rate for currencyCross
+            //throw exception if there is no exchange rate for currencyCross
+            if(!ExchangeRates.ContainsKey(currencyCross)) {
+                throw new ArgumentException("Given currency cross does not have a specified exchange rate.");
+            }
 
-            //TODO: throw exception if amount is not positive
+            //throw exception if amount is not positive
+            if(amount <= 0) {
+                throw new ArgumentException("Amount must be positive.");
+            }
 
-            //assuming everything goes right...
-            //take the exchange rate from ExchangeRates
-            //IF:
-            //they want the first currency in the currency cross of an exchange rate,
-            //THEN:
-            //amount *= rate; return amount
-            //ELSE:
-            //reverseExchangeRate = 1 / exchange rate; amount *= rate; return amount
+            double rate = ExchangeRates[currencyCross];
+            if(currencyCross.Substring(0, 3) == currency) { //if they want the first currency of the cross currency (AAA from AAABBB),
+                amount *= rate;                             //multiply amount by rate
+                return amount;                              //and return amount
+            } else {                                        //ELSE
+                double reverseRate = 1 / rate;              //reverse the rate (if 1 AAA = 6.50 BBB, 1 BBB = 1 / 6.50 = 0.15 AAA),
+                amount *= reverseRate;                      //multiply amount by reversed rate,
+                return amount;                              //and return amount
+            }
         }
         #endregion
     }

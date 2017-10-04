@@ -8,7 +8,7 @@ namespace UnitTestProject {
     [TestClass]
     public class CurrencyExchangeTest {
 
-        #region Constructor
+        #region Constructor tests
         [TestMethod]
         public void TestCurrencyExchange_Constructor_CurrenciesEmpty_Exception() {
             //arrange
@@ -41,7 +41,7 @@ namespace UnitTestProject {
         }
         #endregion
 
-        #region Properties
+        #region Property tests
         [TestMethod]
         public void TestCurrencyExchange_Currencies_GetOnce() {
             //arrange
@@ -86,7 +86,7 @@ namespace UnitTestProject {
         }
         #endregion
 
-        #region Methods
+        #region Method tests
         [TestMethod]
         public void TestCurrencyExchange_ExchangeRateCurrencyCrossEmpty_Exception() {
             //arrange
@@ -113,6 +113,10 @@ namespace UnitTestProject {
             //act, assert
             Assert.ThrowsException<ArgumentException>(() => exchange.SpecifyExchangeRate("AAABBB", -5.50));
         }
+
+        //TODO: change exchange rate
+
+        //TODO: test CalculateExchangedRate()
         #endregion
     }
 }
