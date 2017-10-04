@@ -6,29 +6,41 @@ namespace TestExampleC {
         #region Instance fields
         List<string> _currencies;
         List<string> _currencyCrosses;
-        Dictionary<string, float> _exchangeRates;
+        Dictionary<string, double> _exchangeRates;
         #endregion
 
         #region Constructor
         public CurrencyExchange(List<string> currencies) {
-            _currencies = currencies;
             _currencyCrosses = new List<string>();
-            _exchangeRates = new Dictionary<string, float>();
+            _exchangeRates = new Dictionary<string, double>();
+
+            //throw exception on currencies being null or empty
+            if(currencies == null || currencies.Count == 0) {
+                throw new ArgumentException("Currencies list must not be empty.");
+            }
+            //throw exception on a currency inside list not being 3 characters
+            foreach(string currency in currencies) {
+                if(currency.Length != 3) {
+                    throw new ArgumentException("All currency abbreviations must be exactly 3 characters.");
+                }
+            }
+            _currencies = currencies;
+
 
             InitCrosses();
         }
         #endregion
 
         #region Properties
-        List<string> Currencies {
+        public List<string> Currencies {
             get { return _currencies; }
         }
 
-        List<string> CurrencyCrosses {
+        public List<string> CurrencyCrosses {
             get { return _currencyCrosses; }
         }
 
-        Dictionary<string, float> ExchangeRates {
+        public Dictionary<string, double> ExchangeRates {
             get { return _exchangeRates; }
         }
         #endregion
@@ -77,7 +89,7 @@ namespace TestExampleC {
         /// <param name="currencyCross">An existing cross
         /// of two currencies in the format AAABBB.</param>
         /// <param name="rate">A positive decimal number for the exchange rate.</param>
-        public void SpecifyExchangeRate(string currencyCross, float rate) {
+        public void SpecifyExchangeRate(string currencyCross, double rate) {
             //throw exception if currencyCross is empty,
             //whitespace, or otherwise not 6 characters
             if (String.IsNullOrWhiteSpace(currencyCross) || currencyCross.Length != 6) {
@@ -102,6 +114,29 @@ namespace TestExampleC {
             } else {
                 ExchangeRates.Add(currencyCross, rate);
             }
+        }
+
+        //calculate exchanged rate
+        public void CalculateExchangedRate(string currencyCross, string currency, int amount) {
+            //TODO: throw exception if currencyCross is empty,
+            //whitespace, or otherwise not 6 characters
+
+            //TODO: throw exception if currencyCross does not match an entry in CurrencyCrosses
+
+            //TODO: throw exception if currency does not match an entry in Currencies
+
+            //TODO: throw exception if there is no exchange rate for currencyCross
+
+            //TODO: throw exception if amount is not positive
+
+            //assuming everything goes right...
+            //take the exchange rate from ExchangeRates
+            //IF:
+            //they want the first currency in the currency cross of an exchange rate,
+            //THEN:
+            //amount *= rate; return amount
+            //ELSE:
+            //reverseExchangeRate = 1 / exchange rate; amount *= rate; return amount
         }
         #endregion
     }
