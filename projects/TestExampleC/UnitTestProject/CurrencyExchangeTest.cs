@@ -86,7 +86,7 @@ namespace UnitTestProject {
         }
         #endregion
 
-        #region Method tests
+        #region SpecifyExchangeRate method tests
         [TestMethod]
         public void TestCurrencyExchange_ExchangeRateCurrencyCrossEmpty_Exception() {
             //arrange
@@ -114,9 +114,130 @@ namespace UnitTestProject {
             Assert.ThrowsException<ArgumentException>(() => exchange.SpecifyExchangeRate("AAABBB", -5.50));
         }
 
-        //TODO: change exchange rate
+        [TestMethod]
+        public void TestCurrencyExchange_ExchangeRateChange() {
+            //arrange
+            CurrencyExchange exchange = new CurrencyExchange(new List<string> { "AAA", "BBB", "CCC" });
+            double expectedResult = 2.50;
 
-        //TODO: test CalculateExchangedRate()
+            //act
+            exchange.SpecifyExchangeRate("AAABBB", 6.50);
+            exchange.SpecifyExchangeRate("AAABBB", 2.50);
+            double actualResult = exchange.ExchangeRates["AAABBB"];
+
+            //assert
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+        #endregion
+
+        #region CalculateExchangedRate method tests
+        [TestMethod]
+        public void TestCurrencyExchange_CalculateExchangedRateCrossEmpty_Exception() {
+            //arrange
+            CurrencyExchange exchange = new CurrencyExchange(new List<string> { "AAA", "BBB", "CCC" });
+
+            //act
+            exchange.SpecifyExchangeRate("AAABBB", 6.50);
+
+            //assert
+            Assert.ThrowsException<ArgumentException>(() => exchange.CalculateExchangedRate("", "AAA", 200));
+        }
+
+        [TestMethod]
+        public void TestCurrencyExchange_CalculateExchangedRateCrossNoMatch_Exception() {
+            //arrange
+            CurrencyExchange exchange = new CurrencyExchange(new List<string> { "AAA", "BBB", "CCC" });
+
+            //act
+            exchange.SpecifyExchangeRate("AAABBB", 6.50);
+
+            //assert
+            Assert.ThrowsException<ArgumentException>(() => exchange.CalculateExchangedRate("AAADDD", "AAA", 200));
+        }
+
+        [TestMethod]
+        public void TestCurrencyExchange_CalculateExchangedRateCurrencyNoMatch_Exception() {
+            //arrange
+            CurrencyExchange exchange = new CurrencyExchange(new List<string> { "AAA", "BBB", "CCC" });
+
+            //act
+            exchange.SpecifyExchangeRate("AAABBB", 6.50);
+
+            //assert
+            Assert.ThrowsException<ArgumentException>(() => exchange.CalculateExchangedRate("AAABBB", "DDD", 200));
+        }
+
+        [TestMethod]
+        public void TestCurrencyExchange_CalculateExchangedRateExchangeRateNoMatch_Exception() {
+            //arrange
+            CurrencyExchange exchange = new CurrencyExchange(new List<string> { "AAA", "BBB", "CCC" });
+
+            //act
+            exchange.SpecifyExchangeRate("AAABBB", 6.50);
+
+            //assert
+            Assert.ThrowsException<ArgumentException>(() => exchange.CalculateExchangedRate("AAACCC", "AAA", 200));
+        }
+
+        [TestMethod]
+        public void TestCurrencyExchange_CalculateExchangedRateAmountNotPositive_Exception() {
+            //arrange
+            CurrencyExchange exchange = new CurrencyExchange(new List<string> { "AAA", "BBB", "CCC" });
+
+            //act
+            exchange.SpecifyExchangeRate("AAABBB", 6.50);
+
+            //assert
+            Assert.ThrowsException<ArgumentException>(() => exchange.CalculateExchangedRate("AAABBB", "AAA", -200));
+        }
+
+        [TestMethod]
+        public void TestCurrencyExchange_CalculateExchangedRate_CheckOne() {
+            //arrange
+            CurrencyExchange exchange = new CurrencyExchange(new List<string> { "AAA", "BBB", "CCC" });
+            Dictionary<string, double> expectedResult = new Dictionary<string, double>();
+            expectedResult.Add("AAABBB", 6.50);
+
+            //act
+            exchange.SpecifyExchangeRate("AAABBB", 6.50);
+            Dictionary<string, double> actualResult = exchange.ExchangeRates;
+
+            //assert
+            CollectionAssert.AreEqual(expectedResult, actualResult);
+        }
+
+        [TestMethod]
+        public void TestCurrencyExchange_CalculateExchangedRate_CheckMultiple() {
+            //arrange
+            CurrencyExchange exchange = new CurrencyExchange(new List<string> { "AAA", "BBB", "CCC" });
+            Dictionary<string, double> expectedResult = new Dictionary<string, double>();
+            expectedResult.Add("AAABBB", 6.50);
+            expectedResult.Add("AAACCC", 0.50);
+
+            //act
+            exchange.SpecifyExchangeRate("AAABBB", 6.50);
+            exchange.SpecifyExchangeRate("AAACCC", 0.50);
+            Dictionary<string, double> actualResult = exchange.ExchangeRates;
+
+            //assert
+            CollectionAssert.AreEqual(expectedResult, actualResult);
+        }
+
+        [TestMethod]
+        public void TestCurrencyExchange_CalculateExchangedRate_CheckAfterChange() {
+            //arrange
+            CurrencyExchange exchange = new CurrencyExchange(new List<string> { "AAA", "BBB", "CCC" });
+            Dictionary<string, double> expectedResult = new Dictionary<string, double>();
+            expectedResult.Add("AAABBB", 2.50);
+
+            //act
+            exchange.SpecifyExchangeRate("AAABBB", 6.50);
+            exchange.SpecifyExchangeRate("AAABBB", 2.50);
+            Dictionary<string, double> actualResult = exchange.ExchangeRates;
+
+            //assert
+            CollectionAssert.AreEqual(expectedResult, actualResult);
+        }
         #endregion
     }
 }
