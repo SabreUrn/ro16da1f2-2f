@@ -93,6 +93,7 @@ namespace TestExampleC {
             #region SpecifyExchangedRate sanity
             //throw exception if currencyCross is empty,
             //whitespace, or otherwise not 6 characters
+            //TODO: move to ExchangeRates property
             if (String.IsNullOrWhiteSpace(currencyCross) || currencyCross.Length != 6) {
                 throw new ArgumentException("Currency cross must be exactly six characters.");
             }
@@ -111,10 +112,39 @@ namespace TestExampleC {
             //check if currency cross already exist as an exchange rate
             //if it does, edit existing exchange rate
             //it it doesn't, add as new exchange rate(currencyCross, rate)
+            string reverseRate = currencyCross.Substring(3) + currencyCross.Substring(0, 3);
             if (ExchangeRates.ContainsKey(currencyCross)) {
                 ExchangeRates[currencyCross] = rate;
-            } else {
+            } else if (ExchangeRates.ContainsKey(reverseRate)) {
+                ExchangeRates[currencyCross] = 1 / rate;
+            }  else {
                 ExchangeRates.Add(currencyCross, rate);
+            }
+
+            //go through ExchangeRates
+            //if any entry has a cross matching one of our currencyCross but not the other,
+            //also add an ExchangeRates entry for these two
+            bool crossFound = false;
+            string newCross = "";
+            foreach(string cross in ExchangeRates.Keys) {
+                if(cross.Substring(0, 3) == currencyCross.Substring(0, 3)) {    //AAAbbb, AAAccc
+                    newCross = cross.Substring(3) + currencyCross.Substring(3); //aaaBBB, aaaCCC
+                    crossFound = true;                                          //BBBCCC
+                } else if(cross.Substring(0, 3) == currencyCross.Substring(3)) {    //AAAbbb, cccAAA
+                    newCross = cross.Substring(3) + currencyCross.Substring(0, 3);  //aaaBBB, CCCaaa
+                    crossFound = true;                                              //BBBCCC
+                } else if(cross.Substring(3) == currencyCross.Substring(0, 3)) {    //bbbAAA, AAAccc
+                    newCross = cross.Substring(0, 3) + currencyCross.Substring(3);  //BBBaaa, aaaCCC
+                    crossFound = true;                                              //BBBCCC
+                } else if(cross.Substring(3) == currencyCross.Substring(3)) {           //bbbAAA, cccAAA
+                    newCross = cross.Substring(0, 3) + currencyCross.Substring(0, 3);   //BBBaaa, CCCaaa
+                    crossFound = true;                                                  //BBBCCC
+                }
+
+                if (crossFound && !ExchangeRates.ContainsKey(newCross)) {
+                    ExchangeRates.Add(newCross, ExchangeRates[cross] / rate);
+                    crossFound = false;
+                }
             }
         }
 
