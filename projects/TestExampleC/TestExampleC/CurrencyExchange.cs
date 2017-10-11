@@ -25,8 +25,7 @@ namespace TestExampleC {
                 }
             }
             _currencies = currencies;
-
-
+            
             InitCrosses();
         }
         #endregion
@@ -47,6 +46,25 @@ namespace TestExampleC {
 
         #region Private methods
         /// <summary>
+        /// Fills the _currencyCrosses list by calling CurrencyCrossesInsert with all
+        /// possible combinations (not permutations) of currencies in the Currencies list.
+        /// </summary>
+        private void InitCrosses() {
+            //throw exception if Currencies (_currencies) is null or empty
+            if (Currencies == null || Currencies.Count == 0) {
+                throw new ArgumentException("Currencies list does not exist or is empty.");
+            }
+
+            //combine currency acronyms into currency crosses
+            for (int i = 0; i < Currencies.Count - 1; i++) {
+                for (int j = i + 1; j < Currencies.Count; j++) {
+                    CurrencyCrossesInsert(Currencies[i] + Currencies[j]);
+                }
+            }
+        }
+
+
+        /// <summary>
         /// Inserts a new currency cross into the _currencyCrosses list.
         /// </summary>
         /// <param name="currencyCross">An existing cross
@@ -64,24 +82,6 @@ namespace TestExampleC {
 
         #region Public methods
         /// <summary>
-        /// Fills the _currencyCrosses list by calling CurrencyCrossesInsert with all
-        /// possible combinations (not permutations) of currencies in the Currencies list.
-        /// </summary>
-        public void InitCrosses() {
-            //throw exception if Currencies (_currencies) is null or empty
-            if (Currencies == null || Currencies.Count == 0) {
-                throw new ArgumentException("Currencies list does not exist or is empty.");
-            }
-
-            //combine currency acronyms into currency crosses
-            for (int i = 0; i < Currencies.Count - 1; i++) {
-                for (int j = i + 1; j < Currencies.Count; j++) {
-                    CurrencyCrossesInsert(Currencies[i] + Currencies[j]);
-                }
-            }
-        }
-
-        /// <summary>
         /// Adds a new exchange rate to the ExchangeRate dictionary(string, float) if the
         /// specified currencyCross is not already present in ExchangeRate or edits an entry
         /// in the ExchangeRate dictionary if the specified currencyCross already exists.
@@ -90,6 +90,7 @@ namespace TestExampleC {
         /// of two currencies in the format AAABBB.</param>
         /// <param name="rate">A positive decimal number for the exchange rate.</param>
         public void SpecifyExchangeRate(string currencyCross, double rate) {
+            #region SpecifyExchangedRate sanity
             //throw exception if currencyCross is empty,
             //whitespace, or otherwise not 6 characters
             if (String.IsNullOrWhiteSpace(currencyCross) || currencyCross.Length != 6) {
@@ -105,6 +106,7 @@ namespace TestExampleC {
             if (rate <= 0) {
                 throw new ArgumentException("Exchange rate must be positive");
             }
+            #endregion
 
             //check if currency cross already exist as an exchange rate
             //if it does, edit existing exchange rate
@@ -118,6 +120,7 @@ namespace TestExampleC {
 
         //calculate exchanged rate
         public double CalculateExchangedRate(string currencyCross, string currency, double amount) {
+            #region CalculateExchangedRate sanity
             //throw exception if currencyCross is empty,
             //whitespace, or otherwise not 6 characters
             if(String.IsNullOrWhiteSpace(currencyCross) || currency.Length != 6) {
@@ -143,6 +146,7 @@ namespace TestExampleC {
             if(amount <= 0) {
                 throw new ArgumentException("Amount must be positive.");
             }
+            #endregion
 
             double rate = ExchangeRates[currencyCross];
             if(currencyCross.Substring(0, 3) == currency) { //if they want the first currency of the cross currency (AAA from AAABBB),
