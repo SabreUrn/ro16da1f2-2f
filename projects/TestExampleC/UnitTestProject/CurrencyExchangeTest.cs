@@ -7,6 +7,12 @@ using System.Collections.Generic;
 namespace UnitTestProject {
     [TestClass]
     public class CurrencyExchangeTest {
+        private TestContext _testContextInstance;
+
+        public TestContext TestContext {
+            get { return _testContextInstance; }
+            set { _testContextInstance = value; }
+        }
 
         #region Constructor tests
         [TestMethod]
@@ -127,6 +133,26 @@ namespace UnitTestProject {
 
             //assert
             Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [TestMethod]
+        public void TestCurrencyExchange_ExchangeRateMixAutomatic_NoException() {
+            //arrange
+            CurrencyExchange exchange = new CurrencyExchange(new List<string> { "AAA", "BBB", "CCC" });
+            double expectedResult = 2.50 / 6.50;
+
+            //act
+            exchange.SpecifyExchangeRate("AAABBB", 2.50);
+            exchange.SpecifyExchangeRate("AAACCC", 6.50);
+            //double actualResult = exchange.ExchangeRates["BBBCCC"];
+
+            //assert
+            string output = "";
+            foreach (string s in exchange.ExchangeRates.Keys) {
+                TestContext.WriteLine(s);
+            }
+            
+            //Assert.AreEqual(expectedResult, actualResult);
         }
         #endregion
 

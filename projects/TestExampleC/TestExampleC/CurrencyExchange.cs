@@ -90,7 +90,7 @@ namespace TestExampleC {
         /// of two currencies in the format AAABBB.</param>
         /// <param name="rate">A positive decimal number for the exchange rate.</param>
         public void SpecifyExchangeRate(string currencyCross, double rate) {
-            #region SpecifyExchangedRate sanity
+            #region SpecifyExchangeRate sanity
             //throw exception if currencyCross is empty,
             //whitespace, or otherwise not 6 characters
             //TODO: move to ExchangeRates property
@@ -141,7 +141,9 @@ namespace TestExampleC {
                     crossFound = true;                                                  //BBBCCC
                 }
 
-                if (crossFound && !ExchangeRates.ContainsKey(newCross)) {
+                string reverseRate2 = "";
+                if (!String.IsNullOrEmpty(newCross)) reverseRate2 = newCross.Substring(3) + newCross.Substring(0, 3);
+                if (crossFound && !ExchangeRates.ContainsKey(newCross) && ExchangeRates.ContainsKey(reverseRate2)) {
                     ExchangeRates.Add(newCross, ExchangeRates[cross] / rate);
                     crossFound = false;
                 }
