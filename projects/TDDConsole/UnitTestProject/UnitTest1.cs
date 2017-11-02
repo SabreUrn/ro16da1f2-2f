@@ -14,7 +14,7 @@ namespace UnitTestProject {
             int expectedResult = 1;
 
             //act
-            var classUnderTest = new StringUtilities();
+            StringUtilities classUnderTest = new StringUtilities();
             int actualResult = classUnderTest.CountOccurances(strCheck, strFind);
             
             //assert
@@ -29,7 +29,7 @@ namespace UnitTestProject {
             int expectedResult = 3;
 
             //act
-            var classUnderTest = new StringUtilities();
+            StringUtilities classUnderTest = new StringUtilities();
             int actualResult = classUnderTest.CountOccurances(strCheck, strFind);
 
             //assert
@@ -44,7 +44,22 @@ namespace UnitTestProject {
             int expectedResult = 1;
 
             //act
-            var classUnderTest = new StringUtilities();
+            StringUtilities classUnderTest = new StringUtilities();
+            int actualResult = classUnderTest.CountOccurances(strCheck, strFind);
+
+            //assert
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [TestMethod]
+        public void FindOccuranceStringNull() {
+            //arrange
+            string strCheck = null;
+            char strFind = 'y';
+            int expectedResult = -1;
+
+            //act
+            StringUtilities classUnderTest = new StringUtilities();
             int actualResult = classUnderTest.CountOccurances(strCheck, strFind);
 
             //assert

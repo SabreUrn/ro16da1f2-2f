@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 namespace TDDConsole {
     public class StringUtilities {
         public int CountOccurances(string strCheck, char charFind) {
+            if(String.IsNullOrEmpty(strCheck)) {
+                return -1;
+            }
+
             strCheck = strCheck.ToLower();
             charFind = Char.ToLower(charFind);
 
